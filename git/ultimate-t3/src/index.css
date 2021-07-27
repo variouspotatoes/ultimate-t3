@@ -1,5 +1,5 @@
 body {
-  font: 14px "Century Gothic", Futura, sans-serif;
+  font: 18px "Century Gothic", Futura, sans-serif;
   margin: 20px;
 }
 
@@ -14,33 +14,34 @@ ul {
   display: table;
 }
 
-.sub-board, .winner-overlay {
-    width: 100%;
-    height: 100%;
-    position: absolute;
-    left: 0;
-    top: 0;
+.sub-board,
+.winner-overlay {
+  width: 100%;
+  height: 100%;
+  position: absolute;
+  left: 0;
+  top: 0;
 }
 
 .winner-overlay {
-    pointer-events: none;
-    font-size: 90px;
-    line-height: 100px;
-    text-align: center;
-    color: rgba(0, 0, 0, 0.1);
+  pointer-events: none;
+  font-size: 90px;
+  line-height: 100px;
+  text-align: center;
+  color: rgba(0, 0, 0, 0.3);
 }
 
-
 .sub-board-container {
-    position: relative;
-    display: inline-block;
-    margin: 10px;
-    width: 100px;
-    height: 100px;
+  position: relative;
+  display: inline-block;
+  margin: 5px;
+  width: 100px;
+  height: 100px;
 }
 
 .status {
   margin-bottom: 10px;
+  margin-left: 10px;
 }
 
 .square {
@@ -58,8 +59,8 @@ ul {
   width: 34px;
 }
 
-.square:focus {
-  outline: none;
+.square:hover {
+  border: 2px solid darkgrey;
 }
 
 .kbd-navigation .square:focus {

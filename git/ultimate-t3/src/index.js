@@ -26,14 +26,21 @@ class Game extends React.Component {
   };
 
   render() {
+    let status;
+    if (this.state.winner) {
+      status = "The winner is " + this.state.winner + "!";
+    } else {
+      status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+    }
+
     return (
-    <>
-      <Board
-        subBoards={this.state.subBoards}
-        activeBoardIndex={this.state.activeBoardIndex}
-        onClick={(s, r, c) => this.onClick(s, r, c)}
-      />
-      {this.state.winner}
+      <>
+        {status}
+        <Board
+          subBoards={this.state.subBoards}
+          activeBoardIndex={this.state.activeBoardIndex}
+          onClick={(s, r, c) => this.onClick(s, r, c)}
+        />
       </>
     );
   }
@@ -43,26 +50,32 @@ class Game extends React.Component {
     const squares = subBoards[s].squares;
 
     // Validation: make sure move is legal before proceeding
-    if (squares[r][c]) return;
+    if (squares[r][c]) return; //if square is filled
     if (
       !(this.state.activeBoardIndex === -1 || this.state.activeBoardIndex === s)
     )
-      return;
+      return; //if not an active board OR if the subbboard is not the curernt active board
+    if (this.state.winner) return; //if someone has already won
+    if (checkFullBoard(subBoards[3* r + c].squares)) return;
 
-    squares[r][c] = xIsNext ? "X" : "O";
+    squares[r][c] = xIsNext ? "X" : "O"; //set square to x or o depending on who is next
 
     if (calculateWinner(squares) && !subBoards[s].winner) {
+      //check for a winner
       subBoards[s].winner = xIsNext ? "X" : "O";
     }
 
     if (calculateOverallWinner(this.state.subBoards)) {
-          this.state.winner = `The winner is ${calculateOverallWinner(this.state.subBoards)}`;
+      //check for an overall winner
+      this.setState({
+        winner: calculateOverallWinner(this.state.subBoards),
+      });
     }
 
     this.setState({
       subBoards,
       xIsNext: !xIsNext,
-      activeBoardIndex: 3 * r + c,
+      activeBoardIndex: (this.state.winner=== "") ? 3 * r+c : -1,
     });
   }
 }
@@ -171,27 +184,38 @@ function calculateWinner(squares) {
 }
 
 function calculateOverallWinner(subBoards) {
-    const lines = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-    ];
-    for (let i = 0; i < lines.length; i++) {
-      const [a, b, c] = lines[i];
-      if (
-        subBoards[a].winner &&
-        subBoards[a].winner === subBoards[b].winner &&
-        subBoards[a].winner === subBoards[c].winner
-      ) {
-        return subBoards[a].winner
+  const lines = [
+    [0, 1, 2],
+    [3, 4, 5],
+    [6, 7, 8],
+    [0, 3, 6],
+    [1, 4, 7],
+    [2, 5, 8],
+    [0, 4, 8],
+    [2, 4, 6],
+  ];
+  for (let i = 0; i < lines.length; i++) {
+    const [a, b, c] = lines[i];
+    if (
+      subBoards[a].winner &&
+      subBoards[a].winner === subBoards[b].winner &&
+      subBoards[a].winner === subBoards[c].winner
+    ) {
+      return subBoards[a].winner;
+    }
+  }
+  return null;
+}
+
+function checkFullBoard(subBoard) {
+  for (let i = 0; i < 3; i++) {
+    for (let j = 0; j < 3; j++) {
+      if (!subBoard[i][j]) {
+        return false;
       }
     }
-    return null;
   }
+  return true;
+}
 
 ReactDOM.render(<Game />, document.getElementById("root"));
