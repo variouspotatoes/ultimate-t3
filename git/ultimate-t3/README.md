@@ -4,3 +4,4 @@ This is based on the game of ultimate tic-tac-toe, where a typical tic-tac-toe b
 Once a player wins a sub-board, that square is considered that player's square, and is marked with an X or O.
 
 A player wins once they are able to mark three squares in a horizontal, vertical or diagonal row. 
+For more information on this game: https://en.wikipedia.org/wiki/Ultimate_tic-tac-toe
