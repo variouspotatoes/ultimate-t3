@@ -65,17 +65,19 @@ class Game extends React.Component {
       subBoards[s].winner = xIsNext ? "X" : "O";
     }
 
-    if (calculateOverallWinner(this.state.subBoards)) {
+    let winnerExists = false;
+    if (calculateOverallWinner(subBoards)) {
       //check for an overall winner
+      winnerExists = true;
       this.setState({
-        winner: calculateOverallWinner(this.state.subBoards),
+        winner: calculateOverallWinner(subBoards),
       });
     }
 
     this.setState({
       subBoards,
       xIsNext: !xIsNext,
-      activeBoardIndex: (this.state.winner=== "") ? 3 * r+c : -1,
+      activeBoardIndex: (winnerExists) ? -1 : 3 * r + c,
     });
   }
 }
